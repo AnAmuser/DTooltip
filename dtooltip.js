@@ -3,7 +3,7 @@
  * ===================================================
  * Copyright 2012 Kim Lindhardt Madsen
  *
- * TODO find a license
+ * Released under the MIT and GPL licenses.
  * ========================================================== */
 (function (jQuery) {
 
@@ -33,13 +33,13 @@
             // Create elements
             var uniqueID = 'dTooltip_' + this.attr("id");
             var toolTipElement = jQuery(document.createElement('div'))
-                .html(getValue(thisOptions.content))
                 .addClass(thisOptions.cssClass)
                 .attr("id", uniqueID)
                 .css("display", "none");
-            jQuery(document.body).append(toolTipElement);
 
-            // --------------------------- POSITION ----------------------- //
+            // --------------------------- FUNCTIONS ----------------------- //
+            var returnObject = {};
+
             function reposition() {
                 var $element = $(that);
                 var totalSpacing = thisOptions.spacing;
@@ -50,14 +50,14 @@
                 position(toolTipElement, tooltipPosition[0], tooltipPosition[1]);
             }
 
+            function setHtml(html) {
+                toolTipElement.html(getValue(html));   
+            }
 
-            // --------------------------- EVENTS ----------------------- //
-
-            // Enter and leave events
             function show() {
                 reposition();
                 if (thisOptions.show) {
-                    thisOptions.show(toolTipElement);
+                    thisOptions.show.call(returnObject, toolTipElement);
                 } else {
                     revealTooltip(toolTipElement);
                 }
@@ -65,11 +65,17 @@
 
             function hide() {
                  if (thisOptions.remove) {
-                    thisOptions.hide(toolTipElement);
+                    thisOptions.hide.call(returnObject, toolTipElement);
                 } else {
                     hideTooltip(toolTipElement);
                 }
             }
+
+            function remove() {
+                removeTooltip(toolTipElement);
+            }
+
+            // --------------------------- EVENTS ----------------------- //
 
             var cancelHide = false;
             var cancelShow = false;
@@ -108,38 +114,22 @@
                 }
             );
             
-            // -------------------------- ARROWS ----------------------------------------- //
+            // -------------------------- ELEMENTS ----------------------------------------- //
+            toolTipElement.html(getValue(thisOptions.content))
+            jQuery(document.body).append(toolTipElement);
             if (thisOptions.arrowSize) {
                 createPseudoRules(toolTipElement, thisOptions.angle, thisOptions.arrowSize, thisOptions.cssClass);
                 createPseudoRules(toolTipElement, thisOptions.angle, thisOptions.arrowSize, thisOptions.cssClass, true);
             }
 
             // -------------------------- RETURN OBJECT ------------------------ //
-
-            return {
-                /**
-                 * The tooltip element
-                 */
-                element: toolTipElement,
-                /**
-                 * Reposition the tooltip
-                 */
-                reposition: reposition,
-                /**
-                 * Reveal the tooltip
-                 */
-                reveal: show,
-                /**
-                 * Hide the tooltip
-                 */
-                hide: hide,
-                /**
-                 * Remove the tooltip. This destroys it completely.
-                 */
-                remove: function () {
-                    remove(toolTipElement);
-                }
-            };
+            returnObject.element = toolTipElement;
+            returnObject.reposition = reposition;
+            returnObject.reveal = show;
+            returnObject.hide = hide;
+            returnObject.remove = remove;
+            returnObject.setHtml = setHtml; 
+            return returnObject;
         }
     });
 
@@ -329,7 +319,7 @@
         tooltip.fadeOut(200);
     }
 
-    function remove(tooltip) {
+    function removeTooltip(tooltip) {
         tooltip.remove();
     }
 

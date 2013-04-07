@@ -1,0 +1,27 @@
+{
+    "name": "dtooltip",
+    "title": "DTooltip",
+    "description": "DTooltip is designed to be a flexible and still very simple to use plugin for creating tooltips.",
+    "keywords": [
+        "tooltip",
+        "tutorial"
+		"popup"
+    ],
+    "version": "0.5",
+    "author": {
+        "name": "Kim Lindhardt Madsen (AnAmuser)",
+    },
+    "licenses": [
+        {
+            "type": "MIT and GPL",
+            "url": "http://dtooltip.dscripter.com/license.html"
+        }
+    ],
+    "bugs": "http://dtooltip.dscripter.com/contact.html",
+    "homepage": "http://dtooltip.dscripter.com/index.html",
+    "docs": "http://dtooltip.dscripter.com/options.html",
+    "download": "http://dtooltip.dscripter.com/index.html",
+    "dependencies": {
+        "jquery": ">=1.5"
+    }
+}
